@@ -76,9 +76,14 @@ function(export_all_flags _filename)
 endfunction()
 
 function(add_precompiled_header _target _input)
-  cmake_parse_arguments(_PCH "FORCEINCLUDE" "SOURCE_CXX:SOURCE_C" "" ${ARGN})
+  cmake_parse_arguments(_PCH "FORCEINCLUDE" "SOURCE_CXX;SOURCE_C" "" ${ARGN})
 
+  get_filename_component(_input_dir ${_input} DIRECTORY)
   get_filename_component(_input_we ${_input} NAME_WE)
+  if(_input_dir)
+    set(_input_we "${_input_dir}/${_input_we}")
+  endif()
+
   if(NOT _PCH_SOURCE_CXX)
     set(_PCH_SOURCE_CXX "${_input_we}.cpp")
   endif()
